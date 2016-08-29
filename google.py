@@ -180,12 +180,14 @@ class Solution(object):
         return res
 
 # 363. Max Sum of Rectangle No Larger Than K
-# def maxSumSubmatrix(self, matrix, k):
-#         """
-#         :type matrix: List[List[int]]
-#         :type k: int
-#         :rtype: int
-#         """
+    def maxSumSubmatrix(self, matrix, k):
+        """
+        :type matrix: List[List[int]]
+        :type k: int
+        :rtype: int
+        """
+
+
 
 # 373. Find K Pairs with Smallest Sums
     #1 get cartesian product and sort on sum 
