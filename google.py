@@ -94,6 +94,7 @@ class LRUCache(object):
         	self.tail = self.tail.next
 
 
+
 class Solution(object):
 # 66. Plus One
 	def plusOne(self, digits):
@@ -152,6 +153,94 @@ class Solution(object):
        					if temp in islands.id:
        						islands.unite(temp, node)
        	return islands.count
+
+# 354. Russian Doll Envelopes
+    # Sort and dp approach -> Time limit exceeded
+    # Sort and binary search 
+    # also a good way to find longest increasing sequence
+    def maxEnvelopes(self, envelopes):
+        """
+        :type envelopes: List[List[int]]
+        :rtype: int
+        """
+        import bisect 
+        if not envelopes: return 0
+        def foo(x,y):
+            if x[0] == y[0]:
+                return y[1] - x[1]
+            else:
+                return x[0] - y[0]
+        envelopes = sorted(envelopes, cmp=foo)
+        dp = [0]*len(envelopes)
+        res = 0 
+        for item in envelopes:
+            index = bisect.bisect_left(dp, item[1], 0, res)
+            dp[index] = item[1]
+            if index == res: res += 1
+        return res
+
+# 363. Max Sum of Rectangle No Larger Than K
+# def maxSumSubmatrix(self, matrix, k):
+#         """
+#         :type matrix: List[List[int]]
+#         :type k: int
+#         :rtype: int
+#         """
+
+# 373. Find K Pairs with Smallest Sums
+    #1 get cartesian product and sort on sum 
+    #2 use heap 
+    def kSmallestPairs(self, nums1, nums2, k):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :type k: int
+        :rtype: List[List[int]]
+        """
+        
+        import heapq 
+        def push(i,j):
+            if i < len(nums1) and j < len(nums2):
+                heapq.heappush(heap, (nums1[i]+nums2[j], i, j))
+        heap = []
+        push(0,0)
+        res = []
+        while heap and len(res) < k:
+            _,x,y = heapq.heappop(heap)
+            res.append([nums1[x],nums2[y]])
+            push(x,y+1)
+            if y == 0:
+                push(x+1,y)
+        return res
+
+        # import itertools
+        # return sorted(itertools.product(nums1, nums2), key=sum)[:k]
+
+# 388. Longest Absolute File Path
+    # clarify: four consecutive white space count as a tab so we need to use number of space as layer
+    # number 
+    def lengthLongestPath(self, input):
+        """
+        :type input: str
+        :rtype: int
+        """
+        if not input: return 0
+        if '.' not in input: return 0 
+        tokens = input.split('\n')
+        stack = []  #(layer, len)
+        cur = res = 0 
+        for token in tokens:
+            temp = token.lstrip('\t')
+            layer = len(token) - len(temp)
+            if stack:
+                while stack and stack[-1][0] >= layer:
+                    _, rm = stack.pop()
+                    cur -= (rm)
+            stack.append((layer, len(token)+1))
+            cur += len(token)+1
+            if '.' in token:
+                res = max(res, cur)
+        return res-1
     
 
 
